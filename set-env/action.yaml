@@ -1,0 +1,13 @@
+name: Set environment variables
+inputs:
+  env:
+    required: true
+    description: A YAML formatted string containing key value environment variables
+description: Set environment variables from input
+runs:
+  using: composite
+  steps:
+    - run: python "$GITHUB_ACTION_PATH/main.py"
+      shell: bash
+      env:
+        env: ${{ inputs.env }}
