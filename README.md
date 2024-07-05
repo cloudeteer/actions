@@ -11,7 +11,7 @@ This repository contains a collection of custom GitHub Actions, each located in 
 
 ## Contributions
 
-We welcome all kinds of contributions, whether it's reporting bugs, submitting feature requests, or directly contributing to the development. Please read our [Contributing Guidelines](./CONTRIBUTING.md) to learn how you can best contribute.
+We welcome all kinds of contributions, whether it's reporting bugs, submitting feature requests, or directly contributing to the development. Please read our [Contributing Guidelines](CONTRIBUTING.md) to learn how you can best contribute.
 
 Thank you for your interest and support!
 
