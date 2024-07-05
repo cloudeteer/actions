@@ -1,5 +1,7 @@
 > [!NOTE]
-> This repository is publicly accessible and part of our open-source initiative. We warmly invite all members of the open-source community to contribute to this project. The project is primarily developed by our organization, but we appreciate any support and collaboration from the community.
+> This repository is publicly accessible as part of our open-source initiative. We welcome contributions from the community alongside our organization's primary development efforts.
+
+---
 
 # Cloudeteer's GitHub Actions
 
