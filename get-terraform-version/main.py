@@ -25,7 +25,6 @@ def set_output(name, value):
     with open(os.environ["GITHUB_OUTPUT"], "a") as file:
         print(f"Setting GitHub Actions output: {name}={value}")
         print(f"{name}={value}", file=file)
-        file.write(f"{name}={value}\n")
 
 
 required_version = get_required_version()

@@ -5,13 +5,18 @@ inputs:
     required: true
     description: The file path to the configuration file containing the `required_version` setting.
     default: terraform.tf
+outputs:
+  required_version:
+    description: The `required_version` of Terraform as specified in the configuration file.
+    value: ${{ steps.main.outputs.required_version }}
 runs:
   using: composite
   steps:
     - run: pip3 install python-hcl2
       shell: bash
 
-    - run: python "$GITHUB_ACTION_PATH/main.py"
+    - id: main
+      run: python "$GITHUB_ACTION_PATH/main.py"
       shell: bash
       env:
         file_path: ${{ inputs.file-path }}
