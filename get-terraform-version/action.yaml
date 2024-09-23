@@ -1,0 +1,17 @@
+name: Extract Terraform Version
+description: Outputs the `required_version` of Terraform from a specified configuration file.
+inputs:
+  file-path:
+    required: true
+    description: The file path to the configuration file containing the `required_version` setting.
+    default: terraform.tf
+runs:
+  using: composite
+  steps:
+    - run: pip3 install python-hcl2
+      shell: bash
+
+    - run: python "$GITHUB_ACTION_PATH/main.py"
+      shell: bash
+      env:
+        file_path: ${{ inputs.file-path }}
