@@ -12,7 +12,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: pip3 install python-hcl2
+    - run: pip install -r "${GITHUB_ACTION_PATH:-.}/requirements.txt"
       shell: bash
 
     - id: main
