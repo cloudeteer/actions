@@ -1,10 +1,10 @@
 name: Extract Terraform Version
 description: Outputs the `required_version` of Terraform from a specified configuration file.
 inputs:
-  file-path:
+  directory:
     required: true
     description: The file path to the configuration file containing the `required_version` setting.
-    default: terraform.tf
+    default: .
 outputs:
   required_version:
     description: The `required_version` of Terraform as specified in the configuration file.
@@ -19,4 +19,4 @@ runs:
       run: python "$GITHUB_ACTION_PATH/main.py"
       shell: bash
       env:
-        file_path: ${{ inputs.file-path }}
+        directory: ${{ inputs.directory }}

@@ -1,24 +1,35 @@
 import hcl2
 import os
+import glob
+
+
+directory = os.environ["directory"]
 
 
 def get_required_version():
-    file_path = os.environ["file_path"]
-    with open(file_path, "r") as file:
-        conf = hcl2.load(file)
+    required_version = None
+    for file_path in glob.glob(f"{directory}/*.tf"):
+        with open(file_path, "r") as file:
+            conf = hcl2.load(file)
 
-        if "terraform" not in conf:
-            raise Exception(
-                f'"terraform" configuration block not found in "{file_path}"'
-            )
+            if "terraform" not in conf:
+                print(
+                    f'::debug::"terraform" configuration block not found in "{file_path}"'
+                )
 
-        elif "required_version" not in conf["terraform"][0]:
-            raise Exception(f'"required_version" not found in "{file_path}"')
+            elif "required_version" not in conf["terraform"][0]:
+                print(f'"::debug::required_version" not found in "{file_path}"')
 
-        else:
-            required_version = conf["terraform"][0]["required_version"]
-            print(f'Terraform version "{required_version}" found in "{file_path}"')
-            return required_version
+            else:
+                required_version = conf["terraform"][0]["required_version"]
+                print(
+                    f'::notice::Terraform version "{required_version}" found in "{file_path}"'
+                )
+
+    if not required_version:
+        raise Exception(f'"::warning::required_version" not found in "{directory}"')
+    else:
+        return required_version
 
 
 def set_output(name, value):
