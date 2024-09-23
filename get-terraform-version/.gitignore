@@ -1,0 +1,4 @@
+# virtualenv
+bin/
+lib/
+pyvenv.cfg
