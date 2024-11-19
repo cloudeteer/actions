@@ -1,5 +1,5 @@
-import hcl2
 import os
+import re
 import glob
 
 
@@ -10,28 +10,26 @@ def get_directory():
 def get_required_version():
     directory = get_directory()  # Access "directory" here
     required_version = None
-    for file_path in glob.glob(f"{directory}/*.tf"):
+    """
+    Extract the 'required_version' from all Terraform files in a directory.
+    
+    :param directory: Path to the directory containing Terraform files
+    :return: The 'required_version' found in the Terraform files
+    """
+    tf_files = glob.glob(os.path.join(directory, "*.tf"))  # List all .tf files in the directory
+
+    for file_path in tf_files:
         with open(file_path, "r") as file:
-            conf = hcl2.load(file)
-
-            if "terraform" not in conf:
-                print(
-                    f'::debug::"terraform" configuration block not found in "{file_path}"'
-                )
-
-            elif "required_version" not in conf["terraform"][0]:
+            content = file.read()
+            match = re.search(r'required_version\s*=\s*"(.*?)"', content)
+            if match:
+                version = match.group(1)
+                print(f'::notice::Terraform version "{version}" found in "{file_path}"')
+                required_version = version
+            else:
                 print(f'::debug::"required_version" not found in "{file_path}"')
 
-            else:
-                required_version = conf["terraform"][0]["required_version"]
-                print(
-                    f'::notice::Terraform version "{required_version}" found in "{file_path}"'
-                )
-
-    if not required_version:
-        raise Exception(f'::warning::"required_version" not found in "{directory}"')
-    else:
-        return required_version
+    return required_version
 
 
 def set_output(name, value):
