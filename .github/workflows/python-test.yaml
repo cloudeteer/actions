@@ -1,0 +1,64 @@
+---
+name: Python Tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # weekly on Sunday at 00:00
+  push:
+    branches:
+      - main
+    paths:
+      - 'get-terraform-version/**'
+      - 'set-env/**'
+      - '.github/workflows/python-test.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'get-terraform-version/**'
+      - 'set-env/**'
+      - '.github/workflows/python-test.yml'
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        directory:
+          - get-terraform-version
+          - set-env
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # Install dependencies and run tests for each directory
+      - name: Install dependencies and run tests for ${{ matrix.directory }}
+        run: |
+          cd "${{ matrix.directory }}"  # Change to the subfolder directory
+ 
+          # Install dependencies from requirements.txt if available
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          fi
+
+          # Install pytest
+          pip install pytest
+
+           # Check if any test files exist, then run pytest
+          if [ -z "$(find . -name 'test_*.py')" ]; then
+            echo "No test files found, skipping pytest."
+          else
+            pytest
+          fi

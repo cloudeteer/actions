@@ -16,7 +16,7 @@ runs:
       shell: bash
 
     - id: main
-      run: python "$GITHUB_ACTION_PATH/main.py"
+      run: python "$GITHUB_ACTION_PATH/src/main.py"
       shell: bash
       env:
         directory: ${{ inputs.directory }}

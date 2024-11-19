@@ -3,10 +3,12 @@ import os
 import glob
 
 
-directory = os.environ["directory"]
+def get_directory():
+    return os.environ["directory"]
 
 
 def get_required_version():
+    directory = get_directory()  # Access "directory" here
     required_version = None
     for file_path in glob.glob(f"{directory}/*.tf"):
         with open(file_path, "r") as file:
@@ -18,7 +20,7 @@ def get_required_version():
                 )
 
             elif "required_version" not in conf["terraform"][0]:
-                print(f'"::debug::required_version" not found in "{file_path}"')
+                print(f'::debug::"required_version" not found in "{file_path}"')
 
             else:
                 required_version = conf["terraform"][0]["required_version"]
@@ -27,7 +29,7 @@ def get_required_version():
                 )
 
     if not required_version:
-        raise Exception(f'"::warning::required_version" not found in "{directory}"')
+        raise Exception(f'::warning::"required_version" not found in "{directory}"')
     else:
         return required_version
 
@@ -38,7 +40,8 @@ def set_output(name, value):
         print(f"{name}={value}", file=file)
 
 
-required_version = get_required_version()
+if __name__ == "__main__":
+    required_version = get_required_version()
 
-if required_version:
-    set_output("required_version", required_version)
+    if required_version:
+        set_output("required_version", required_version)
