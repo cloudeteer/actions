@@ -8,25 +8,34 @@ def get_directory():
 
 
 def get_required_version():
-    directory = get_directory()  # Access "directory" here
-    required_version = None
     """
-    Extract the 'required_version' from all Terraform files in a directory.
-    
-    :param directory: Path to the directory containing Terraform files
+    Extract the 'required_version' from all Terraform files in a directory,
+    skipping commented-out lines.
+
     :return: The 'required_version' found in the Terraform files
     """
-    tf_files = glob.glob(os.path.join(directory, "*.tf"))  # List all .tf files in the directory
+    directory = get_directory()  # Access "directory" here
+    required_version = None
+
+    # List all .tf files in the directory
+    tf_files = glob.glob(os.path.join(directory, "*.tf"))
+
+    # Regular expression to match required_version, ignoring commented lines
+    regex = re.compile(
+        r'^(?!\s*(#|//))\s*required_version\s*=\s*"(.*?)"',
+        re.MULTILINE
+    )
 
     for file_path in tf_files:
         with open(file_path, "r") as file:
             content = file.read()
-            match = re.search(r'required_version\s*=\s*"(.*?)"', content)
-            if match:
-                version = match.group(1)
+            matches = regex.findall(content)
+            for match in matches:
+                version = match[1]
                 print(f'::notice::Terraform version "{version}" found in "{file_path}"')
                 required_version = version
-            else:
+                break
+            if not matches:
                 print(f'::debug::"required_version" not found in "{file_path}"')
 
     return required_version
