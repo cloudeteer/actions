@@ -89,3 +89,19 @@ def test_get_required_version_empty_tf_files(monkeypatch):
         with patch("glob.glob", return_value=["/mock/directory/empty.tf"]):
             version = get_required_version()
             assert version is None, "If no required_version is found, the return value should be None."
+
+# Test case: Valid Terraform file with required_version and commented versions
+def test_get_required_version_commented_versions(monkeypatch):
+    monkeypatch.setenv("directory", "/mock/directory")
+
+    tf_content = """
+    terraform {
+      #required_version = ">= 1.7"
+      required_version = ">= 1.9"
+      #required_version = ">= 1.10"
+    }
+    """
+    with patch("builtins.open", mock_open(read_data=tf_content)):
+        with patch("glob.glob", return_value=["/mock/directory/valid.tf"]):
+            result = get_required_version()
+            assert result == ">= 1.9", "Should correctly parse required_version."
