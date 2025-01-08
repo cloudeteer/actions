@@ -1,13 +1,18 @@
 name: Extract Terraform Version
-description: Outputs the `required_version` of Terraform from a specified configuration file.
+description: Outputs version of Terraform from a specified configuration file.
 inputs:
   directory:
-    required: true
-    description: The file path to the configuration file containing the `required_version` setting.
-    default: .
+    required: false
+    description: The file path to the configuration file containing the terraform version setting.
+  file:
+    required: false
+    description: The filename (or wildcard filter) of the configuration file containing the terraform version setting.
+  pattern:
+    required: false
+    description: The pattern to search for in the configuration file.
 outputs:
   required_version:
-    description: The `required_version` of Terraform as specified in the configuration file.
+    description: The version of Terraform as specified in the configuration file.
     value: ${{ steps.main.outputs.required_version }}
 runs:
   using: composite

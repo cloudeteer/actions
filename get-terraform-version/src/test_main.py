@@ -105,3 +105,15 @@ def test_get_required_version_commented_versions(monkeypatch):
         with patch("glob.glob", return_value=["/mock/directory/valid.tf"]):
             result = get_required_version()
             assert result == ">= 1.9", "Should correctly parse required_version."
+
+# Test case: Valid .terraform-version file
+def test_terraform_version_from_terraform_version_file(monkeypatch):
+    monkeypatch.setenv("directory", "/mock/directory")
+    monkeypatch.setenv("file", ".terraform-version")
+    monkeypatch.setenv("pattern", r'^(.*)$')
+
+    tf_content = "1.9"
+    with patch("builtins.open", mock_open(read_data=tf_content)):
+        with patch("glob.glob", return_value=["/mock/directory/.terraform-version"]):
+            result = get_required_version()
+            assert result == "1.9", "Should correctly parse required_version."
