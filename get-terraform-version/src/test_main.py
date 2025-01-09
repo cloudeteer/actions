@@ -117,3 +117,23 @@ def test_terraform_version_from_terraform_version_file(monkeypatch):
         with patch("glob.glob", return_value=["/mock/directory/.terraform-version"]):
             result = get_required_version()
             assert result == "1.9", "Should correctly parse required_version."
+
+# Test case: Valid .tools-version (asdf) file
+def test_terraform_version_from_asdf_file(monkeypatch):
+    monkeypatch.setenv("directory", "/mock/directory")
+    # see: https://asdf-vm.com/manage/configuration.html
+    monkeypatch.setenv("file", ".tool-versions")
+    monkeypatch.setenv("pattern", r'^terraform (.*)$')
+
+    tf_content = """
+    ruby 2.5.3 # This is a comment
+    terraform 1.9
+    # This is another comment
+    nodejs 10.15.0
+    """
+    # trim content
+    tf_content = "\n".join([line.strip() for line in tf_content.split("\n")])
+    with patch("builtins.open", mock_open(read_data=tf_content)):
+        with patch("glob.glob", return_value=["/mock/directory/.tool-versions"]):
+            result = get_required_version()
+            assert result == "1.9", "Should correctly parse required_version."

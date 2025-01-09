@@ -59,6 +59,8 @@ jobs:
 
 ### Custom directory, file and pattern
 
+The following example extracts the Terraform version from the `.terraform-version` file, which is used by tools such as [tenv](https://github.com/tofuutils/tenv) and [tfenv](https://github.com/tfutils/tfenv). In this example, the file is located in a custom directory, `path/to/terraform/config`, and contains only the Terraform version. As a result, the pattern `^(.*)$` is used to match its content.
+
 ```yaml
 - name: Get Terraform version
   id: terraform_version
@@ -67,4 +69,16 @@ jobs:
     directory: path/to/terraform/config
     file: ".terraform-version"
     pattern: "^(.*)$"
+```
+
+The next example extracts the Terraform version from the [asdf](https://asdf-vm.com/) configuration file `.tool-versions`. In this example, the configuration file is also located in a custom directory, `path/to/terraform/config`. The pattern used matches the [configuration](https://asdf-vm.com/manage/configuration.html) syntax of the `asdf` tool.
+
+```yaml
+- name: Get Terraform version
+  id: terraform_version
+  uses: cloudeteer/actions/get-terraform-version@main
+  with:
+    directory: path/to/terraform/config
+    file: ".tool-versions"
+    pattern: "^terraform (.*)$"
 ```

@@ -3,16 +3,16 @@ description: Outputs version of Terraform from a specified configuration file.
 inputs:
   directory:
     required: false
-    description: The file path to the configuration file containing the terraform version setting.
+    description: The directory path to the folder containing the configuration file with the Terraform version setting.
   file:
     required: false
-    description: The filename (or wildcard filter) of the configuration file containing the terraform version setting.
+    description: The filename (or glob pattern) of the configuration file(s) that contain the Terraform version setting.
   pattern:
     required: false
-    description: The pattern to search for in the configuration file.
+    description: The regex pattern used to search for the Terraform version in the configuration file.
 outputs:
   required_version:
-    description: The version of Terraform as specified in the configuration file.
+    description: The Terraform version or version constraint specified in the configuration file.
     value: ${{ steps.main.outputs.required_version }}
 runs:
   using: composite
