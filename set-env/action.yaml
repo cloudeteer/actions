@@ -7,7 +7,7 @@ description: Set environment variables from input
 runs:
   using: composite
   steps:
-    - run: python "$GITHUB_ACTION_PATH/main.py"
+    - run: python3 "$GITHUB_ACTION_PATH/main.py"
       shell: bash
       env:
         env: ${{ inputs.env }}
